@@ -1,0 +1,28 @@
+---
+
+- hosts: targets
+  become: True
+
+  roles:
+    - role: selinux
+      selinux_state: disabled
+      tags:
+        - selinux
+
+    - role: docker
+      tags:
+        - docker
+
+    - role: hosts
+      hosts_config:
+        - ip: 54.77.96.50
+          hostname: gitlab.haufe-umantis.com
+      tags:
+        - hosts_config
+
+  pre_tasks:
+    - name: upgrade all packages
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
